@@ -1,12 +1,28 @@
-import React from "react";
+import React, { use } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../provider/AuthProvider";
+
 const Register = () => {
+  const { creatUser,setUser } = use(AuthContext);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
+    const name = form.name.value;
+    const photo = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+    //console.log({ email, password, name, photo });
+
+    creatUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        //console.log(user);
+        setUser(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="flex justify-center items-center  bg-base-200 mb-10">
@@ -21,7 +37,7 @@ const Register = () => {
             <input
               type="text"
               className="input"
-              name="email"
+              name="name"
               placeholder="Your Name"
             />
             {/* photo url */}
@@ -29,7 +45,7 @@ const Register = () => {
             <input
               type="text"
               className="input"
-              name="email"
+              name="photo"
               placeholder="Photo URL"
             />
             {/* email */}
@@ -60,7 +76,9 @@ const Register = () => {
               <a className="link link-hover text-lg">Forgot password?</a>
             </div>
 
-            <button className="btn btn-neutral mt-4 text-lg">Register</button>
+            <button type="submit" className="btn btn-neutral mt-4 text-lg">
+              Register
+            </button>
             <div className="mt-4 text-center text-lg">
               <p>
                 Allreday have an account?{" "}
